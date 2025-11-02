@@ -261,9 +261,10 @@ def load_teeth():
 
       gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
       grayy = (gray*255*10).astype(np.uint8)
+      cv2.imwrite('gray.png', grayy)
       thresh = cv2.threshold(grayy, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
 
-      erosion = cv2.erode(thresh,kernel,iterations=2) #,iterations=2
+      erosion = cv2.erode(thresh,kernel,iterations=5) #,iterations=2
       cv2.imwrite('eroded.png', erosion)
       #gradient, aka the contours
       gradient = cv2.morphologyEx(erosion, cv2.MORPH_GRADIENT, kernel)
