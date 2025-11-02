@@ -17,10 +17,10 @@ After installing the required libraries, a program can be run as follows:
 ./malloclusion input.png
 ```
 
-Each instruction is encoded by the location of successive teeth in the programmer's mouth, read left-right, top-bottom on the provided panoramic radiograph. An operand is the absolute standard deviation of a tooth relative to its arch, in units of its height, multiplied by 10. The language itself comprises of manipulating 8-bit integers on a stack.
+Each instruction is encoded by the location of successive teeth in the programmer's mouth, read left-to-right, top-to-bottom on the panoramic radiograph. An operator is the absolute standard deviation of a tooth relative to its arch, in units of its height, multiplied by 10, whereas an operand is multiplied by 100. The language itself comprises of manipulating 8-bit integers on a stack:
 
 ```
-0: Push (multiplying by 100) teeth to the stack until 0 encountered
+0: Push teeth to the stack until 0 encountered
 1: Add top 2 stack items, push result
 2: Subtract top of stack from second top, push result
 3: Multiply top 2 stack value, push result
