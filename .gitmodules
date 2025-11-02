@@ -1,0 +1,3 @@
+[submodule "TeethSegmentation"]
+	path = TeethSegmentation
+	url = https://github.com/RobertSmithers/TeethSegmentation
