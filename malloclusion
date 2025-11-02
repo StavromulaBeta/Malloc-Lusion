@@ -279,8 +279,8 @@ def load_teeth():
     bottom = -1000000000
 
     for i in range(1, nteeth):
-        #if 10000 * values[i, cv2.CC_STAT_AREA] < (output_img.shape[0] * output_img.shape[1]):
-        #    continue
+        if values[i, cv2.CC_STAT_AREA] < 1000:
+            continue
         if values[i, cv2.CC_STAT_TOP] < top:
             top = values[i, cv2.CC_STAT_TOP]
         if values[i, cv2.CC_STAT_TOP] + values[i, cv2.CC_STAT_HEIGHT] > bottom:
@@ -292,8 +292,8 @@ def load_teeth():
     upper = []
 
     for i in range(1, nteeth):
-        #if 10000 * values[i, cv2.CC_STAT_AREA] < (output_img.shape[0] * output_img.shape[1]):
-        #    continue
+        if values[i, cv2.CC_STAT_AREA] < 1000:
+            continue
         center = centroid[i]
         arch = int(center[1] < archcenter)
         #print(arch, center)
@@ -313,9 +313,8 @@ def load_teeth():
     #print(lower)
 
     upperavg = np.mean([x[1] for x in upper])
-    upperstd = np.std([x[1] for x in upper])
-
     loweravg = np.mean([x[1] for x in lower])
+    upperstd = np.std([x[1] for x in upper])
     lowerstd = np.std([x[1] for x in lower])
 
     upper_norm = [-(x[1] - upperavg) / upperstd for x in upper]
@@ -330,90 +329,121 @@ program = load_teeth()
 stack = []
 ip = 0
 
+def push(a):
+    stack.append(a)
+
+def pop():
+    if len(stack) != 0:
+        return stack.pop()
+    else:
+        return 0
+
+debug = True
+
+def dprint(s):
+    if debug:
+        print(s)
+
+dprint(program)
+
 while ip < len(program):
-    op = round(program[ip] * 10)
+    op = int(program[ip] * 10)
     ip = ip + 1
 
     # Push
     if op == 0:
         while ip < len(program):
-            val = round(program[ip] * 100) % 256
+            val = int(program[ip] * 100) % 256
+            dprint(f"PUSH {program[ip]}")
             ip = ip + 1
             if val == 0:
                 break
-            stack.append(val)
+            push(val)
 
     # ADD
     elif op == 1:
-        b = stack.pop()
-        a = stack.pop()
-        stack.append((a + b) % 256)
+        dprint("+")
+        b = pop()
+        a = pop()
+        push((a + b) % 256)
 
     # SUB
     elif op == 2:
-        b = stack.pop()
-        a = stack.pop()
-        stack.append((a - b) % 256)
+        dprint("-")
+        a = pop()
+        b = pop()
+        push((a - b) % 256)
 
     # MUL
     elif op == 3:
-        b = stack.pop()
-        a = stack.pop()
-        stack.append(int(a * b) % 256)
+        dprint("*")
+        b = pop()
+        a = pop()
+        push(int(a * b) % 256)
 
     # DIV
     elif op == 4:
-        b = stack.pop()
-        a = stack.pop()
-        stack.append(a // b)
+        dprint("/")
+        b = pop()
+        a = pop()
+        if b == 0:
+            push(0)
+        else:
+            push(a // b)
 
     # PRINT_NUM
     elif op == 5:
-        print(stack.pop())
+        dprint("Print number")
+        print(pop())
 
     # PRINT_CHAR
     elif op == 6:
-        val = stack.pop(0)
-        print(chr(val), end='')
+        dprint("Print character")
+        print(chr(pop()), end='')
 
     # JZ
     elif op == 7:
-        ip = stack.pop()
+        dprint("Jump")
+        ip = pop()
 
     #PRINT_STACK
     elif op == 8:
+        dprint("Print Stack")
         print(stack)
+        stack = []
 
     #PRINT_CHARS
     elif op == 9:
+        dprint("Print String Stack")
         chars = [ chr(val) for val in stack ]
         print("".join(chars))
+        stack = []
 
     elif op == 10:
-        stack.pop()
+        dprint("Drop");
+        pop()
 
     elif op == 11:
-        a = stack.pop()
-        stack.append(a)
-        stack.append(b)
+        dprint("Clone")
+        a = pop()
+        push(a)
+        push(a)
 
     elif op == 12:
-        a = stack.pop()
-        b = stack.pop()
-        stack.append(a)
-        stack.append(b)
+        dprint("Swap")
+        a = pop()
+        b = pop()
+        push(a)
+        push(b)
 
     # HALT BUT FUNNY
     elif op >= 30:
         print(".....Waow.....(your teeth are really fucked up)")
-        break
 
     # HALT
-    elif op >= 13:
+    if op >= 13:
+        dprint("Halt")
         break
-
-    else:
-        raise ValueError(f"Unknown opcode: {op}")
 
 if len(stack) > 0:
     print(f"STACK: {stack}\n(\"{"".join([ chr(val) for val in stack ])}\")")
