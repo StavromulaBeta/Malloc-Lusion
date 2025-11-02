@@ -339,7 +339,7 @@ def pop():
     else:
         return 0
 
-debug = True
+debug = False
 
 def dprint(s):
     if debug:
