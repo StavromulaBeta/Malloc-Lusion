@@ -1,16 +1,21 @@
 # Malloc-Lusion
 
-Malloc-Lusion is possibly the world's first *Orthodontic Programming Language (OPL)*. Programs are comprised of the relative positions of teeth in the programmer's mouth, as ascertained by panoramic radiograph.
+*Malloc-Lusion™* is possibly the world's first *Orthodontic Programming Language (OPL)*. Programs are comprised of the relative positions of teeth in the programmer's mouth, as ascertained by panoramic radiograph.
 
 ![Panoramic radiograph example](input3.png)
 
 ## Language Overview
 
-Malloc-Lusion interprets data as stored in the programmer's mouth. The position of each tooth encodes an instruction. As such, the programmer writes code via conventional orthodontic manipulation of their teeth (albeit in potentially unconventional directions). Programs are input as a *grayscale* png file of a panoramic radiograph taken of the programmer. The (standardized) deviance of each tooth, read left-right, top-bottom, from the mean dental arch are then used to perform calculations.
+*Malloc-Lusion™* interprets data as stored in the programmer's mouth. The position of each tooth encodes an instruction. As such, the programmer writes code via conventional orthodontic manipulation of their teeth (albeit in potentially unconventional directions). Programs are input as a *grayscale* png file of a panoramic radiograph taken of the programmer. The (standardized) deviance of each tooth, read left-right, top-bottom, from the mean dental arch are then used to perform calculations.
 
 ![As seen by the program](input3_eroded.png)
 
-## Instruction Encoding and Commands
+## Programming
+
+After installing the required libraries, a program can be run as follows:
+```
+./malloclusion input.png
+```
 
 Each instruction is encoded by the location of successive teeth in the programmer's mouth, read left-right, top-bottom on the provided panoramic radiograph. An operand is the absolute standard deviation of a tooth relative to its arch, in units of its height, multiplied by 10. The language itself comprises of manipulating 8-bit integers on a stack.
 
@@ -31,6 +36,8 @@ Each instruction is encoded by the location of successive teeth in the programme
 13+: Halt
 ```
 
+Most people's teeth are either infinite loops or simply push garbage to the stack. This is not our failing, but rather a failing of modern orthodontics. Do better.
+
 # Hello world
 
 Unfortunately we haven't yet managed to find a volunteer for our hello world program, but it might look something like this:
@@ -39,7 +46,7 @@ Unfortunately we haven't yet managed to find a volunteer for our hello world pro
 
 ## Interpreter
 
-The provided interpreter for Malloc-Lusion is written in Python and uses [RobertSmithers/TeethSegmentation](https://github.com/robertsmithers/teethsegmentation). A convolutional neural network to identifies the position of each tooth in the input panoramic radiograph and masks them out in turn, such that the vertical deviations can be computed using OpenCV.
+The provided interpreter for *Malloc-Lusion™* is written in Python and uses [RobertSmithers/TeethSegmentation](https://github.com/robertsmithers/teethsegmentation). A convolutional neural network to identifies the position of each tooth in the input panoramic radiograph and masks them out in turn, such that the vertical deviations can be computed using OpenCV.
 
 
 ## FAQ
